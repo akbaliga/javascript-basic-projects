@@ -71,4 +71,73 @@ const menu = [
     img: "./images/item-9.jpeg",
     desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
   },
+  {
+    id: 10,
+    title: "seared salmon",
+    category: "dinner",
+    price: 16.99,
+    img: "./images/item-10.jpeg",
+    desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
+  },
 ];
+
+const sectionCenter = document.querySelector('.section-center')
+const btnContainer = document.querySelector('.btn-container');
+
+function buildMenu(menu) {
+  sectionCenter.textContent = ''; 
+  let displayMenu = menu.map(item => {
+        return `<article class="menu-item">
+        <img src="${item.img}" alt="menu item" class="photo" />
+        <div class="item-info">
+        <header>
+            <h4>${item.title}</h4>
+            <h4 class="price">${item.price}</h4>
+        </header>
+        <p class="item-text">${item.desc}</p>
+        </div>
+      </article>`
+  });
+  displayMenu = displayMenu.join('');
+  sectionCenter.innerHTML = displayMenu;
+}
+
+function buildCategoryFilters(menuItems) {
+  displayMenuButtons(menuItems);
+}
+
+function displayMenuButtons(menuItems) {
+    const categories = menuItems.reduce((acc, cur) => {
+      if (!acc.includes(cur.category)) {
+        acc.push(cur.category);
+      }
+      return acc;
+    }, ['all']);
+    const buttons = categories.map(category => {
+      return `<button class="filter-btn" type="button" data-category="${category}">${category}</button>`
+    }).join('');
+    
+    btnContainer.innerHTML = buttons;  
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    // Event listener to filter by category 
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const category = e.currentTarget.dataset.category;
+        if (category === 'all') {
+          buildMenu(menu);
+        } else {
+          const categoryItems = menu.filter(item => item.category === category);
+          buildMenu(categoryItems);
+        }
+      });
+    })
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  buildMenu(menu);
+  buildCategoryFilters(menu);
+});
+
+
+
